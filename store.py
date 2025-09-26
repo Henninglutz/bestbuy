@@ -1,60 +1,50 @@
-import products
+from typing import List, Tuple
 from products import Product
 
-
 class Store:
-    def __init__(self, products):
-        self._products = list[Product]()
+    def __init__(self, products: List[Product] | None = None):
+        self._products: List[Product] = list(products) if products else []
 
-    def add_product(self, product):
+    def add_product(self, product: Product) -> None:
         if product not in self._products:
             self._products.append(product)
 
-    def remove_product(self, product):
+    def remove_product(self, product: Product) -> None:
         if product in self._products:
             self._products.remove(product)
 
+#sum of availabe products
     def get_total_quantity(self) -> int:
-        for p in self._products:
-            if p.is_active():
-                all_products += p.quantity
-            return sum(all_products)
+        return sum(p.quantity for p in self._products if p.is_active())
 
+# lists all active products
+    def get_all_products(self) -> List[Product]:
+        return [p for p in self._products if p.is_active()]
 
-    def get_all_products(self) -> list[Product]:
-        for p in self._products:
-            if p.is_active():
-                return [p.quantity]
+    def order(self, shopping_list: List[Tuple[Product, int]]) -> float:
+        if not shopping_list:
+            raise ValueError("Empty order")
 
-    def order(self, shopping_list) -> float:
+# is product available
         for product, qty in shopping_list:
             if product not in self._products:
-                raise ValueError(f"Product '{product, 'name', '?'}' not listed.")
+                raise ValueError(f"Product '{getattr(product, 'name', '?')}' not listed.")
             if not product.is_active():
                 raise ValueError(f"Product '{product.name}' not active.")
             if qty <= 0:
-                raise ValueError(f"try an other quantity, less than {qty} for '{product.name}'.")
+                raise ValueError(f"Quantity must be > 0 for '{product.name}'.")
             if qty > product.get_quantity():
                 raise ValueError(
-                    f"not enough '{product.name}': "
-                    f"available: {product.get_quantity()}."
+                    f"Not enough '{product.name}': available {product.get_quantity()}."
                 )
 
-                # 2) Preis berechnen (aktueller Produktpreis * Menge)
-            total_price = 0.0
-            for product, qty in shopping_list:
-                total_price += product.price * qty
+# total price?
+        total_price = 0.0
+        for product, qty in shopping_list:
+            total_price += product.price * qty
 
-            # 3) Verkauf durchführen (Bestand reduzieren)
-            for product, qty in shopping_list:
-                product.sell(qty)
+# amount ?
+        for product, qty in shopping_list:
+            product.sell(qty)
 
-            return float(total_price)
-
-bose = products.Product("Bose QuietComfort Earbuds", price=250, quantity=500)
-mac = products.Product("MacBook Air M2", price=1450, quantity=100)
-
-best_buy = Store([bose, mac])
-
-pixel = products.Product("Google Pixel 7", price=500, quantity=250)
-best_buy.add_product(pixel)
+        return float(total_price)
