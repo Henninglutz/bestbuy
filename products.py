@@ -10,6 +10,7 @@ class Product:
         self.quantity = int(quantity)
         self.active = bool(active)
 
+#buitin function
     def __str__(self) -> str:
         status = "active" if self.active else "inactive"
         return f"{self.name} | price: {self.price} | qty: {self.quantity} ({status})"
@@ -35,9 +36,6 @@ class Product:
 
     def deactivate(self) -> None:
         self.active = False
-
-#    def show(self) -> None:
-#        print(self)
 
 #storeage and validation of collection
     def buy(self, quantity: int, price: float | None = None) -> int:

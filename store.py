@@ -1,14 +1,19 @@
 from typing import List, Tuple
 from products import Product
 
+#initalization of OOP class
 class Store:
     def __init__(self, products: List[Product] | None = None):
         self._products: List[Product] = list(products) if products else []
 
+
+#adding products which are not yet listed
     def add_product(self, product: Product) -> None:
         if product not in self._products:
             self._products.append(product)
 
+
+#delete products from store inventory
     def remove_product(self, product: Product) -> None:
         if product in self._products:
             self._products.remove(product)
@@ -21,6 +26,8 @@ class Store:
     def get_all_products(self) -> List[Product]:
         return [p for p in self._products if p.is_active()]
 
+
+#checks order validation
     def order(self, shopping_list: List[Tuple[Product, int]]) -> float:
         if not shopping_list:
             raise ValueError("Empty order")
@@ -46,5 +53,4 @@ class Store:
 # amount ?
         for product, qty in shopping_list:
             product.sell(qty)
-
         return float(total_price)
